@@ -1,0 +1,132 @@
+ESQUEMAS EN SQL SERVER
+
+Trabajar con esquemas permite disponer de más flexibilidad en la administración de los permisos de objeto de base de datos.
+ Un esquema es un contenedor con nombre para objetos de base de datos,
+ que permite agrupar objetos en espacios de nombres independientes.
+SQL Server incluye diez esquemas predefinidos que usan el mismo nombre que los usuarios y los roles de base de datos integrados. Estos esquemas se han creado principalmente por compatibilidad con versiones anteriores. No puede quitar los esquemas con el mismo nombre que las funciones fijas de base de datos, aunque no los necesite. No puede quitar los siguientes esquemas:
+
+1 – dbo
+2 – guest
+3 – sys
+4 – INFORMATION_SCHEMA
+
+como usar los esquema 
+
+1-En el Explorador de objetos, expanda la carpeta Bases de datos .
+2-Expanda la base de datos en la que se va a crear el esquema de la misma.
+3-Haga clic con el botón derecho en la carpeta Seguridad , seleccione Nuevoy seleccione Esquema.
+4-En el cuadro de diálogo Esquema - Nuevo , en la página General , escriba un nombre para el nuevo esquema en el cuadro Nombre de esquema .
+5-En el cuadro Propietario del esquema , escriba el nombre del usuario o rol de base de datos que va a poseer el esquema. Como alternativa, haga clic en Buscar para abrir el cuadro de diálogo Buscar roles y usuarios .
+6-Haga clic en Aceptar.
+
+ejemplos de consultas en sql 
+
+1-INNER JOIN implícito
+Por ejemplo, para obtener los datos del cliente y el pedido en la misma consulta:
+SELECT nombreCliente, idPedido, fechaPedido
+FROM CLIENTE, PEDIDO
+WHERE CLIENTE.idCliente = PEDIDOpedido.idCliente
+Como vemos, podemos empezar escribiendo tal cuál qué datos nos piden (SELECT), de dónde
+podemos obtenerlos (FROM) y qué criterio (WHERE). Esta es la versión más antigua de SQL,
+aunque se sigue empleando, conociéndose como JOIN implícito ya que no se usa por ningún
+lado la palabra JOIN, pero se está haciendo la intersección por la foreign key, en este caso la
+columna idCliente.
+
+2-Consultas agrupadas (GROUP BY)
+Las consultas anteriores recuperaban, trabajaban con, y mostraban información a nivel de
+cada registro individual de la base de datos. Así, si tenemos un producto con un determinado
+precio, podemos devolver el precio mediante SELECT precioLinea o bien operar sobre él como
+en SELECT precioLinea * 0.85.
+Ahora bien, podemos querer obtener información que no proviene de un registro individual
+sino de la agrupación de información, como es el caso de contar el número de líneas de
+pedido, sumar el precio de todas las líneas por cada pedido, etc. Para ello, debemos emplear
+funciones agregadas y en la mayoría de los casos agrupar por algún campo.
+Así, para ver el número total de registros podemos hacer:
+SELECT COUNT(*)
+FROM LINEAPEDIDO
+Si por el contrario deseamos obtener el total de líneas por pedido, debemos indicar que
+agrupe por idPedido, lo que contará todos los registros con el mismo idPedido y calculará su
+cuenta:
+SELECT idPedido, COUNT(*)
+FROM LINEAPEDIDO
+GROUP BY idPedido
+Lo mismo se puede aplicar a otras funciones como la suma, indicando en ese caso aparte de la
+agrupación el campo que queremos sumar:
+SELECT idPedido, SUM(precioLinea)
+FROM LINEAPEDIDO
+GROUP BY idPedido
+
+3-Devolución de expresiones
+Asignación de un alias a un dato devuelto (AS)
+SELECT idCliente AS id, nombre AS cliente, descripcion AS desc
+FROM CLIENTES
+Uso de expresiones empleando operadores y/o funciones
+Podemos practicar en SQLzoo a usar expresiones con operadores y funciones. Por ejemplo:
+SELECT MOD(DAY(NOW()),7) AS numSemana, POW(2,3) AS potencia8
+Devuelve el número de semana en la que nos encontramos dentro del mes, ya que NOW() nos
+devuelve la fecha/hora actual, de la cual extraemos el día con DAY, y posteriormente
+calculamos el módulo 7 de dicho día (de modo que para un día 26 devolvería un 5, por
+ejemplo). El dato con alias potencia8 devolvería 8 (2 elevado a 3, POW es power, potencia).
+
+4-Devolución de filas nulas/no nulas (IS NULL / IS NOT NULL)
+SELECT idPedido
+FROM PEDIDO
+WHERE direccionEnvio IS NULL
+Devolvería los pedidos que no tienen dirección de envío asociada
+
+5-Consultas por intersecciones entre tablas (JOIN)
+podemos obtener una consulta que obtenga datos del cliente y de la venta. Por ejemplo,
+nombre, apellidos, codcoche y color, mediante una consulta del tipo:
+SELECT nombre, apellidos, codcoche, color
+FROM CLIENTE, VENTA
+WHERE CLIENTE.cifcl = VENTA.idCliente
+
+6-INNER JOIN natural (NATURAL JOIN)
+SELECT nombreCliente, idPedido, fechaPedido
+FROM CLIENTE NATURAL JOIN PEDIDO
+Esta consulta obtiene lo mismo que el join implícito inicial, de forma que NATURAL JOIN
+establece la condición de igualdad entre los campos con el mismo nombre. 
+
+7-LEFT JOIN
+El resultado de esta operación siempre contiene todos los registros de la relación izquierda
+(primera tabla que indicamos), y aquellos de la tabla derecha que cumplen la condición
+establecida. Para el resto aparecerá en los campos correspondientes a dicha tabla un NULL.
+SELECT nombreCliente, idPedido, fechaPedido
+FROM CLIENTE LEFT JOIN PEDIDO
+ON cliente.idCliente = pedido.idCliente
+Esta consulta devolverá todos los clientes con sus pedidos, y un registro por cada cliente que
+no tenga pedidos.
+
+8-RIGHT JOIN
+El RIGHT JOIN es análogo al LEFT JOIN, pero devolviendo todos los registros de la relación
+derecha (segunda tabla que aparece), y únicamente aquellos de la tabla izquierda que cumplen
+la condición del JOIN. El resultado de esta operación siempre contiene todos los registros de la
+relación derecha (segunda tabla que indicamos), de modo que en aquellos sin equivalente en
+la parte izquierda tendrán en los campos correspondientes a dicha tabla un NULL.
+SELECT nombreCliente, idPedido, fechaPedido
+FROM CLIENTE RIGHT JOIN PEDIDO
+ON cliente.idCliente = pedido.idCliente
+Asumiendo que pudiéramos tener en la base de datos pedidos sin cliente asociado, esta
+consulta devolverá todos los pedidos con sus clientes, y en caso de que el cliente no aparezca
+el nombreCliente sería NULL
+
+9-FULL OUTER JOIN
+SELECT EMPLEADO.nombre, EMPLEADO.apellidos, EMPRESA.nombre
+FROM EMPLEADO FULL OUTER JOIN EMPRESA
+ ON EMPLEADO.empresa = EMPRESA.cif
+Esta consulta devolvería tanto los datos de las empresas sin empleados como los de los
+empleados sin empresa, apareciendo rellenos todos los datos de la consulta únicamente para
+aquellos registros que cumplen la condición del JOIN, y apareciendo NULL en unos u otros
+campos para el resto de registros.
+Como se puede ver, esta consulta es equivalente a mostrar tanto los registros devueltos por el
+LEFT como por el RIGHT JOIN, eliminando los repetidos (aquellos registros que cumplan la
+condición del JOIN, que serían devueltos por ambas consultas).
+
+10-Ordenar según criterios (ORDER BY)
+Podemos ordenar los registros devueltos por una consulta por el campo o campos que
+estimemos oportunos:
+SELECT *
+FROM CIUDAD
+ORDER BY provincia ASC, numhabitantes DESC
+Esta consulta devolvería todas las ciudades ordenadas por provincia en orden ascendente, y
+dentro de los de la misma provincia ordenaría las ciudades por orden descendente del número 
