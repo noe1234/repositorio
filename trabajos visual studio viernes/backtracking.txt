@@ -1,0 +1,40 @@
+backtracking
+
+Backtracking (o busqueda atras) es una tecnica de programacion para hacer
+busqueda sistematica a traves de todas las configuraciones posibles dentro de un
+espacio de busqueda.
+		ejemplo en c
+ 
+int carga ( int* g, int* p, int* sol, int M) {
+int pos = 0; // Posicion actual en la recorrida de elementos.
+int ganancia = 0; // Ganancia parcial acumulada.
+int m_ganancia = 0; // Mejor ganancia encontrada
+int disponible = M; // Espacio disponible restante.
+int restante = 0; // Ganancia restante disponible
+
+int * parcial = new int[n]; // Marcaremos con 1 si llevamos al i, o con 0 en caso contrario
+for (int i=0; i<n; i++) {
+parcial[i] = 0; // Inicializamos en cero los eltos elegido.
+restante += g[i]; // Ganancia de los elementos restantes, para la poda.
+}
+
+/* Llamamos a la función recursiva */
+Back(g, p, parcial, ganancia, m_ganancia, disponible, restante, pos, sol);
+
+delete[] parcial;
+return m_ganancia;
+}
+
+		ejemplo en python
+ 
+def permute(list, s):
+    if list == 1:
+        return s
+    else:
+        return [ y + x
+                 for y in permute(1, s)
+                 for x in permute(list - 1, s)
+                 ]
+
+print(permute(1, ["a","b","c"]))
+print(permute(2, ["a","b","c"]))

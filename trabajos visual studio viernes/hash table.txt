@@ -1,0 +1,98 @@
+hash table 
+
+Una tabla hash es una estructura de datos que se usa para implementar una matriz asociativa,
+ una estructura que puede asignar claves a valores. 
+Una tabla hash usa una función hash para calcular un índice en una matriz de cubos o ranuras. 
+Este programa implementará una tabla hash colocando cada elemento en un índice particular de la matriz de tabla hash.
+
+	ejemplo en c 
+
+Necesitamos definir funciones de inicialización para ht_items. Esta función asigna una porción de memoria del tamaño de una ht_item, y guarda una copia de las cadenas ky ven la nueva porción de memoria. La función se marca como staticporque solo se llamará por código interno a la tabla hash.
+
+// hash_table.c 
+# include  < stdlib.h > 
+# include  < string.h >
+
+# incluye  " hash_table.h "
+
+static ht_item * ht_new_item ( const  char * k, const  char * v) {
+    ht_item * i = malloc ( sizeof (ht_item));
+    i-> key = strdup (k);
+    i-> valor = strdup (v);
+    regreso i;
+}
+ht_newInicializa una nueva tabla hash. sizeDefine cuántos artículos podemos almacenar. Esto se fija en 53 por ahora. Vamos a ampliar esto en la sección de cambio de tamaño . Iniciamos la matriz de elementos con calloc, que llena la memoria asignada con NULLbytes. Una NULLentrada en la matriz indica que el depósito está vacío.
+
+// hash_table.c 
+ht_hash_table * ht_new () {
+    ht_hash_table * ht = malloc ( sizeof (ht_hash_table));
+
+    ht-> tamaño = 53 ;
+    ht-> cuenta = 0 ;
+    ht-> items = calloc (( size_t ) ht-> size , sizeof (ht_item *));
+    devuelve ht;
+}
+También necesitamos funciones para eliminar ht_items y ht_hash_tables, que está freeasignada a la memoria, por lo que no provocamos pérdidas de memoria .
+
+// hash_table.c 
+static  void  ht_del_item (ht_item * i) {
+     free (i-> key );
+    libre (i-> valor );
+    libre (i);
+}
+
+
+void  ht_del_hash_table (ht_hash_table * ht) {
+     para ( int i = 0 ; i <ht-> size ; i ++) {
+        ht_item * item = ht-> items [i];
+        if (item! = NULL ) {
+             ht_del_item (item);
+        }
+    }
+    libre (ht-> artículos );
+    libre (ht);
+}
+Hemos escrito un código que define una tabla hash y nos permite crear y destruir una. Aunque no hace mucho en este punto, todavía podemos probarlo.
+
+// main.c 
+# include  " hash_table.h "
+
+int  main () {
+    ht_hash_table * ht = ht_new ();
+    ht_del_hash_table (ht);
+}
+
+		ejemplo en python 
+Declaramos un diccionario vacío como este:
+
+>>> D = {}
+Entonces, podemos añadir sus elementos:
+
+>>> D ['a'] = 1
+>>> D ['b'] = 2
+>>> D ['c'] = 3
+>>> D
+{'a': 1, 'c': 3, 'b': 2}
+Es una estructura con par (clave, valor):
+
+D [clave] = valor
+La cadena utilizada para "indexar" la tabla hash D se denomina "clave". Para acceder a los datos almacenados en la tabla, necesitamos conocer la clave:
+
+>>> D ['b'] 
+2
+¿Cómo pasamos por la tabla hash?
+
+>>> para k en D.keys ():
+... imprimir D [k]
+... 
+1
+3
+2
+Si queremos imprimir el par (clave, valor):
+
+>>> para k, v en D.items ():
+... imprimir k, ':', v
+... 
+a: 1
+c: 3
+b: 2

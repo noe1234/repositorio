@@ -1,0 +1,136 @@
+generador lineal congruente
+
+El generador lineal congruente es un ejemplo muy simple de un generador de números aleatorios.
+ Es uno de los algoritmos de generación de números pseudoaleatorios más antiguos y conocidos. La función que se utiliza en este método -Xn+1=(aXn + C) mod m
+
+ejemplo en c 
+
+#include <iostream>
+using namespace std;
+class mRND {
+   public:
+   void seed(unsigned int s) {
+      _seed= s;
+   }
+   protected:
+   mRND() :
+   _seed(0), a(0), c(0), m(2147483648) { }
+   int rnd() {
+      return (_seed = (a * _seed + c) % m);
+   }
+   int a, c;
+   unsigned int m, _seed;
+};
+class MS_RND: public mRND {
+   public:
+   MS_RND() {
+      a = 214013;
+      c = 2531011;
+   }
+   int rnd() {
+      return mRND::rnd() >> 16;
+   }
+};
+class BSD_RND: public mRND {
+   public:
+   BSD_RND() {
+      a = 1016404597;
+      c = 12345;
+   }
+   int rnd() {
+      return mRND::rnd();
+   }
+};
+int main(int argc, char* argv[]) {
+   BSD_RND bsd_rnd;
+   MS_RND ms_rnd;
+   cout << "MS RAND:" << endl << "-----------" << endl;
+   for (int x = 0; x < 6; x++)
+      cout << ms_rnd.rnd() << endl;
+   cout << endl << "BSD RAND:" << endl << "-------------" << endl;
+   for (int x = 0; x < 6; x++)
+      cout << bsd_rnd.rnd() << endl;
+      return 0;
+}
+
+		ejemplo en python 
+COMIENZO AL
+ COMENTARIO 
+   Algol 68 Genie comprueba si hay un desbordamiento de enteros mientras que el 
+   lenguaje de referencia deja el resultado sin definir, por lo tanto, para la portabilidad, necesitamos 
+   ver qué tan amplia debe ser una variable para mantener el valor máximo posible 
+   antes de la reducción del rango. Esto ocurre en el BSD RNG cuando 
+   rseed = 2147483647 y por lo tanto es 2147483647 * 1103515245 + 12345 =
+    2369780942852710860 , que a su vez es de 19 dígitos decimales. Utilice 
+   consultas ambientales para determinar el ancho necesario. MODO DE 
+COMENTARIO RANDINT = UNION ( INT , LARGO
+       INT ,  LARGA  LARGA  INT ) ; 
+   RANDINT rseed : =  ( ancho int  > 18 | 0 |: 
+		     largo int ancho  > 18 | 
+		     LONG 0 |  LONG  LONG 0 ) ; 
+   PROC srand =  ( INT x )  VOID  : 
+   ( rseed |  ( INT ) : rseed : = x , 
+    ( LONG  INT ) :rseed : =  LENG x | rseed : =  LENG  LENG x ) ; 
+   PROC bsd rand =  INT  : 
+   BEGIN 
+      CASE rseed IN 
+      ( INT ri ) : 
+      BEGIN 
+	 INT a = 1103515245 , c = 12345 , m1 = 2 ^ 16 , m2 = 2 ^ 15 ; 
+COMENTARIO 
+   Esa curiosa declaración es porque 2 ^31 de desborde durante la 
+   compilación pero el MODO declaración de randInt garantías de que 
+   no se derrame durante la ejecución - tiempo. Suponemos que un INT es de al menos 
+   32 bits de ancho , de lo contrario se necesitaría una solución similar para 
+   la declaración de un. 
+COMENTARIO 
+	 INT resultado =  ( ri * a + c )  MOD  ( m1 * m2 ) ; rseed : = resultado ; 
+	 resultado 
+      FIN , 
+      ( LARGO INT rli ) : 
+      COMIENZO 
+	 LARGO  INT a =  LARGO 1103515245 , c =  LARGO 12345 , m =  LARGO 2 ^ 31 ; 
+	 LONG  INT result =  ( rli * a + c )  MOD m ; rseed : = resultado ; 
+	 ACORTAR resultado 
+      FIN , 
+      ( LARGO  LARGO  INT IRLL )  :
+      COMIENZO 
+	 LARGO  LARGO  INT a =  LARGO  LARGO 1103515245 ,
+ 	 c =  LARGO  LARGO 12345 , m =  LARGO  LARGO 2 ^ 31 ; 
+	 LARGO  LARGO  INT resultado =  ( rlli * a + c )  MOD   m ; rseed : = resultado ; 
+	 SHORTEN  SHORTEN resultado 
+      END 
+      ESAC 
+   END ; 
+   Proces ms rand=  INT  : 
+   COMENZAR 
+      CASE rseed IN 
+      ( INT ri ) : 
+      COMENZAR 
+	 INT una = 214 013 , c = 2.531.011 , m1 = 2 ^ 15 , m2 = 2 ^ 16 ; Resultado 
+	 INT =  ( ri * a + c )  MOD  ( m1 * m2 ) ; rseed : = resultado ;
+	 resultado % m2 
+      FINAL , 
+      ( LONG  INT rli ) : 
+      COMENZAR 
+	 LARGO  INT a =  LARGO 214013 , c =  LARGO 2531011 , m =  LARGO 2 ^ 31 , m2 =  LARGO 2 ^ 16 ; 
+	 LONG  INT result =  ( rli * a + c )  MOD m ; rseed : =como resultado ; 
+	 ACORTAR  ( resultado % m2 ) 
+      FIN , 
+      ( LONG  LONG  INT IRLL )  : 
+      COMENZAR 
+	 LONG  LONG  INT un =  LONG  LONG 214013 ,
+ 	 c =  LONG  LONG 2.531.011 , m =  LONG  LONG 2 ^ 31 , m2 =  LONG  LONG 2 ^ 16 ; 
+	 LARGO  LARGO  INT resultado=  ( rlli * a + c )  MOD m ; rseed : = resultado ; 
+	 SHORTEN  SHORTEN  ( resultado % m2 ) 
+      END 
+      ESAC 
+   END ; 
+   srand ( 0 ) ; 
+   TO 10 DO  printf  ( ( $ g ( 0 ) l $ , bsd rand ) )  OD ; 
+   imprimir  ( nueva línea ) ; 
+   srand( 0 ) ; 
+   TO 10 DO  printf  ( ( $ g ( 0 ) l $ , ms rand ) )  OD ; 
+   srand ( 0 ) 
+FIN
+ 

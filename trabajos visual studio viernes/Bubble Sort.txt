@@ -1,0 +1,44 @@
+Bubble Sort
+
+El método de ordenamiento de burbuja, es un algoritmo que se aplica para poder ordenar una cantidad de datos ya sea de forma ascendente o descendente.
+
+		ejemplo en c
+
+//DE MENOR A MAYOR (Ascendente)
+#define Nelementos 4
+....
+
+int i,j;                //Variables contadoras del ciclo.
+int lista[Nelementos]={6,9,3,1}; //Declaracion e inicializacion de un arreglo de 4 elementos.
+int temp=0;             //Variable temporal.
+
+for (i=1;i<Nelementos;i++)
+{
+       for (j=0; j < Nelementos-i ;j++) // for(j=0; j < Nelementos-i; j++) es menor y no menor igual
+       {
+          if (lista[j] > lista[j+1])//Condicion mayor-menor
+          {
+            temp=lista[j];
+            lista[j]=lista[j+1];
+            lista[j+1]=temp;
+          }
+       }
+}
+//Para cambiar el modo de ordenamiento solo debemos cambiar la condicion < ó >
+
+		ejemplo en python
+
+import sys;
+
+numbers = [3,4,6,5,2,7,0,9,8,1];
+
+def sort(numbers):
+    for i in range(len(numbers)):
+        for y in range(i,len(numbers)):
+            if numbers[i] > numbers[y]:
+                swap = numbers[i];
+                numbers[i] = numbers[y];
+                numbers[y] = swap;
+    return numbers;
+
+print(sort(numbers));

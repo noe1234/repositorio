@@ -1,0 +1,81 @@
+METODO quicksort
+
+El método de ordenamiento rápido (quicksort) es un algoritmo basado en la técnica de divide y vencerás, que permite, en promedio, 
+ordenar n elementos en un tiempo proporcional a n log n. Esta es la técnica de ordenamiento más rápida conocida. 
+ejemplo;
+#include <stdlib.h>
+#include <stdio.h>
+
+/*funcion para comparar dos elementos del arreglo*/
+int comparacion(const void *i, const void *j) {
+    return *(int *)i - *(int *)j;
+}
+
+int main(void) {
+    int i;
+    int tam;
+  
+    /*definimos el tamaño del arreglo*/
+    printf("Ingrese el tamaño del arreglo:n");
+    scanf("%d", &tam);
+    int arreglo[tam];
+   
+    /*llenamos el arreglo*/
+    printf("Ingrese valores para el arreglo:n");
+    for (i = 0; i < tam; i++)
+        scanf("%d", &arreglo[i]);
+    printf("n");
+   
+    /*mostramos el arreglo original*/
+    printf("Arreglo Originaln");
+    for (i = 0; i < tam; i++)
+        printf("%d ", arreglo[i]);
+    printf("nn");
+ 
+    /*hacemos el llamado a la funcion qsort
+      para que ordene el arreglo*/
+    qsort(arreglo, tam, sizeof(int), comparacion);
+ 
+    /*mostramos el arreglo ordenado*/
+    printf("Arreglo Ordenadon");
+    for (i = 0; i < tam; i++)
+        printf("%d ", arreglo[i]);
+    printf("nn");
+}
+
+			PYTHON EJEMPLO
+
+def quicksort(lista,izq,der):
+    i=izq
+    j=der
+    x=lista[(izq + der)/2]
+ 
+    while( i <= j ):
+        while lista[i]<x and j<=der:
+            i=i+1
+        while x<lista[j] and j>izq:
+            j=j-1
+        if i<=j:
+            aux = lista[i]; lista[i] = lista[j]; lista[j] = aux;
+            i=i+1;  j=j-1;
+ 
+        if izq < j:
+        quicksort( lista, izq, j );
+    if i < der:
+        quicksort( lista, i, der );
+ 
+def imprimeLista(lista,tam):
+    for i in range(0,tam):
+        print lista[i]
+ 
+def leeLista():
+    lista=[]
+    cn=int(raw_input("Cantidad de numeros a ingresar: "))
+ 
+    for i in range(0,cn):
+        lista.append(int(raw_input("Ingrese numero %d : " % i)))
+    return lista
+ 
+A=leeLista()
+quicksort(A,0,len(A)-1)
+imprimeLista(A,len(A))
