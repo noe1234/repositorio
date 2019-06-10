@@ -1,0 +1,48 @@
+Acceso remoto a una Base de Datos MySQL
+Para dar acceso remoto a nuestra base de datos MySQL deberemos entrar en nuestro panel de control Cpanel,
+ y en la sección Bases de Datos entrar en la opción Acceso Remoto a Bases de Datos MySQL. (MySQL remoto®)
+Nos aparecerá un casillero para introducir el host deseado, Añadir Host de Acceso, y es en ese lugar donde deberemos introduicr el host desde el cual queremos acceder remotamente. Tenemos varias opciones:
+
+– Acceso desde una IP. Podemos introducir la IP de nuestro pública de nuestro ordenador si queremos acceder desde una aplicación instalada en local, o la IP del servidor donde esté instalada esa misma aplicación si es un servidor diferente.
+
+Por ejemplo: 82.194.73.160
+
+– Acceso desde un rango de IPs. 
+Si son varias IPs las que deben tener acceso a esa base de datos, y están dentro de un mismo rango podemos introducir un parámetro a modo de comodín
+para que con una sola orden podamos dar acceso a todas esa direcciones IP. El símbolo de porcentaje es el que funciona a modo de comodín.
+
+Ejemplo: 82.194.%.%
+
+– Acceso desde cualquier IP.
+ Para dar acceso total a nuestra base de datos podemos utilizar el símbolo del porcentaje "%" a modo de comodín.
+ Hay que utilizar esta opción con cuidado y debemos tener en cuenta que a pesar de permitir el acceso, se deberá concoer el nombre de la base de datos,
+ y el usuario y contraseña de la misma para poder acceder.
+
+Ejemplo: %
+
+Por último deberemos pinchar en Añadir Hosts (Añadir anfitrión) para validar la operación y otorgar el acceso remoto a MySQL.
+
+
+
+
+Primer Paso: Un usuario de MySQL
+
+
+Si todavía no tienen usuarios creados y están usando el de cPanel, para conectarse al MySQL, deben crear un usuario de MySQL, desde:
+cPanel > Bases de Datos > Bases de datos MySQL > Crear usuario
+
+Segundo Paso: Permitir las conexiones remotas
+
+Vamos a… cPanel > Bases de Datos > MySQL Remoto > Añadir anfitrión de acceso:
+Si nuestro usuario va a usar este MySQL para conectarse via un script desde otro servidor, se puede habilitar las conexiones de ese sitio web.
+En el cuadro de texto ponemos el sitio web desde el cual se va a conectar (ej. miotrodominio.com). Tildamos añadir y listo.
+
+Si nuestro usuario tiene IP dinámica (cambia cuando se reinicia el módem) desde donde se va a conectar, tienen la posibilidad de quitar el filtro, añadiendo una IP con comodines para que cualquier IP se pueda conectar, si tienen el usuario y clave correctos: en el cuadro de texto se coloca %.%.%.% (son porcentajes) y cualquiera se podrá conectar, teniendo el usuario y clave indicados. Esta opción sobrepasa a todas las otras (sin importar que se ponga primero o después).
+
+También van a poder permitir sólo a rangos específicos de IP como por ejemplo 190.4.22.% o 201.233.%.% y todos los que empiecen con esos numeros de IP pero terminen con cualquier otro, podrán conectarse y todos los que vengan desde otro rango, no podrán. Esto es útil si uno posee varios servidores con IP correlativa, pero no quiere abrir el acceso a todos.
+
+La configuración deberia quedar de esta forma:
+
+Servidor MySQL: Sitio web en Wiroos o la IP del servidor de Wiroos
+Usuario y Clave: La cuenta de MySQL previamente configurada
+Puerto de conexion: 3306 (sólo en algunos scripts lo solicita)
